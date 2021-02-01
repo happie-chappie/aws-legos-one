@@ -6,6 +6,6 @@ codeuri = "src/"
 runtime = "python3.8"
 source_md5 = ""
 packagetype = "Zip"
-functions = ["DetectTextInImage"]
+functions = ["DataValidatorAndUploader"]
 
 [layer_build_definitions]
