@@ -1,16 +1,16 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: 'AWS::Serverless-2016-10-31'
 
-Description: SAM app that uses Rekognition APIs to detect text in S3 Objects and stores labels in DynamoDB.
+Description: SAM app that uses validated and filters data uploaded to S3
 
 Resources:
-  DetectTextInImage:
+  DataValidatorAndUploader:
     Type: 'AWS::Serverless::Function'
     Properties:
       CodeUri: src/
       Handler: app.lambda_handler
       Runtime: python3.8
-      Description: Uses Rekognition APIs to detect text in S3 Objects and stores the text and labels in DynamoDB.
+      Description: Validates and filters data uploaded to S3
       MemorySize: 512
       Timeout: 30
       Policies:

@@ -11,9 +11,6 @@ import pandas as pd
 
 s3_client = boto3.client('s3')
 
-# Get the table name from the Lambda Environment Variable
-
-# --------------- Helper Functions to call Rekognition APIs ------------------
 # --------------- Main handler ------------------
 def lambda_handler(event, context):
     '''
