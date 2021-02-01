@@ -20,6 +20,11 @@ Here is a brief overview of what we have generated for you.
 * [Docker installed](https://www.docker.com/community-edition)
 * [Python Virtual Environment](http://docs.python-guide.org/en/latest/dev/virtualenvs/)
 
+## Notes
+```
+# creates a sample event for given s3 bucket
+sam local generate-event s3 put --bucket aws-sam-one --key test > event_file.json
+```
 
 ## CLI Commands to package and deploy your application
 CLI commands to package, deploy and describe outputs defined within the cloudformation stack.

@@ -1,28 +1,33 @@
 from __future__ import print_function
 import boto3
-from decimal import Decimal
 import json
-import urllib
-import uuid
-import datetime
-import time
+import logging
 import os
+import urllib
+
 import pandas as pd
 
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+
 s3_client = boto3.client('s3')
+account_name = os.environ.get("accountName")
+read_prefix = os.environ.get("readPrefix")
+write_prefix = os.environ.get("writePrefix")
 
 # --------------- Main handler ------------------
 def lambda_handler(event, context):
     '''
-    Uses Rekognition APIs to detect text and labels for objects uploaded to S3
-    and store the content in DynamoDB.
     '''
     # Log the the received event locally.
-    # print("Received event: " + json.dumps(event, indent=2))
+    logger.info("Received event: " + json.dumps(event, indent=2))
 
     # Get the object from the event.
     bucket = event['Records'][0]['s3']['bucket']['name']
     key = urllib.parse.unquote_plus(event['Records'][0]['s3']['object']['key'])
+
+    # we read the data only from they keys which contain the read_prefix
+    # we read only csv data
 
     try:
         obj = s3_client.get_object(Bucket= bucket, Key= key) 
@@ -30,8 +35,9 @@ def lambda_handler(event, context):
 
         df = pd.read_csv(obj['Body']) # 'Body' is a key word
 
-        print("==================")
-        print(df)
+        logger.info(account_name)
+        logger.info("==================")
+        logger.info(df)
 
 
         return 'Success'

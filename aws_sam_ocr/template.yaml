@@ -1,7 +1,18 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: 'AWS::Serverless-2016-10-31'
 
-Description: SAM app that uses validated and filters data uploaded to S3
+Description: SAM app that validates and uploads data back to S3 prefix
+
+Parameters:
+  AccountName:
+    Type: String
+    Default: '{{resolve:ssm/account-name:1}}'
+  ReadPrefix:
+    Type: String
+    Default: model-data
+  WritePrefix:
+    Type: String
+    Default: validated-model-data
 
 Resources:
   DataValidatorAndUploader:
@@ -10,9 +21,17 @@ Resources:
       CodeUri: src/
       Handler: app.lambda_handler
       Runtime: python3.8
-      Description: Validates and filters data uploaded to S3
-      MemorySize: 512
-      Timeout: 30
+      Timeout: 900
+      MemorySize: 1024
+      Description: Validates and uploads data to S3 prefix
+      Environment:
+        Variables:
+          accountName:
+            Ref: AccountName
+          readPrefix:
+            Ref: ReadPrefix
+          writePrefix:
+            Ref: WritePrefix
       Policies:
         - Version: '2012-10-17'
           Statement:
@@ -25,9 +44,16 @@ Resources:
           Type: S3
           Properties:
             Bucket:
-              Ref: SourceImageBucket
+              Ref: S3Bucket
             Events:
               - 's3:ObjectCreated:*'
   
-  SourceImageBucket:
+  S3Bucket:
     Type: 'AWS::S3::Bucket'
+    Properties:
+      BucketName: sam-test-foo-is-bar
+
+Outputs:
+  BucketName:
+    Value: !Ref S3Bucket
+    Description: Name of the Amazon S3 bucket which stores the data
