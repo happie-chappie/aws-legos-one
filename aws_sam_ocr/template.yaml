@@ -19,15 +19,15 @@ Resources:
             - Effect: Allow
               Action:
                 - 's3:GetObject'
-              Resource: arn:aws:s3:::sam-packages-one
+              Resource: 'arn:aws:s3:::*'
       Events:
         BucketEvent1:
           Type: S3
           Properties:
             Bucket:
-              - 'arn:aws:s3:::sam-packages-one'
+              Ref: SourceImageBucket
             Events:
               - 's3:ObjectCreated:*'
   
-#  SourceImageBucket:
-#    Type: 'AWS::S3::Bucket'
+  SourceImageBucket:
+    Type: 'AWS::S3::Bucket'
