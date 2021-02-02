@@ -13,6 +13,9 @@ Parameters:
   WritePrefix:
     Type: String
     Default: validated-model-data
+  FileExtension:
+    Type: String
+    Default: .csv
 
 Resources:
   DataValidatorAndUploader:
@@ -38,6 +41,7 @@ Resources:
             - Effect: Allow
               Action:
                 - 's3:GetObject'
+                - 's3:PutObject'
               Resource: 'arn:aws:s3:::*'
       Events:
         BucketEvent1:
@@ -47,6 +51,16 @@ Resources:
               Ref: S3Bucket
             Events:
               - 's3:ObjectCreated:*'
+            Filter:
+              S3Key:
+                Rules:
+                  - Name: prefix
+                    Value:
+                      Ref: ReadPrefix
+                  - Name: suffix
+                    Value:
+                      Ref: FileExtension
+#
   
   S3Bucket:
     Type: 'AWS::S3::Bucket'

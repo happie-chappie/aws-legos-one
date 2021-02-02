@@ -5,6 +5,8 @@ import logging
 import os
 import urllib
 
+from io import StringIO
+
 import pandas as pd
 
 from validate import validate
@@ -39,13 +41,24 @@ def lambda_handler(event, context):
         df = pd.read_csv(obj['Body']) # 'Body' is a key word
         is_valid = validate(df, string_columns)
 
-        logger.info(account_name)
         logger.info("==================")
         logger.info(is_valid)
-        logger.info(df)
 
+        if is_valid:
+            # writing the data back in write_prefix location using csv buffer
+            to_write_key = key.replace(read_prefix, write_prefix)
+            csv_buffer = StringIO()
+            df.to_csv(csv_buffer)
+            s3_client.put_object(
+                    Bucket= bucket,
+                    Key= to_write_key,
+                    Body=csv_buffer.getvalue()
+                )
 
-        return 'Success'
+            return 'Success'
+        else:
+            return 'The data is not valid'
+
     except Exception as e:
         print("Error processing object {} from bucket {}. Event {}".format(key, bucket, json.dumps(event, indent=2)))
         raise e
