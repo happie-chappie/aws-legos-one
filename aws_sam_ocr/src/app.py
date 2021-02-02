@@ -7,6 +7,8 @@ import urllib
 
 import pandas as pd
 
+from validate import validate
+
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
@@ -14,6 +16,7 @@ s3_client = boto3.client('s3')
 account_name = os.environ.get("accountName")
 read_prefix = os.environ.get("readPrefix")
 write_prefix = os.environ.get("writePrefix")
+string_columns = ["c"]
 
 # --------------- Main handler ------------------
 def lambda_handler(event, context):
@@ -34,9 +37,11 @@ def lambda_handler(event, context):
         # get object and file (key) from bucket
 
         df = pd.read_csv(obj['Body']) # 'Body' is a key word
+        is_valid = validate(df, string_columns)
 
         logger.info(account_name)
         logger.info("==================")
+        logger.info(is_valid)
         logger.info(df)
 
 
