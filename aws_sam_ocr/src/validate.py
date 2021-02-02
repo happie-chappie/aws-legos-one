@@ -33,8 +33,10 @@ def validate(df, string_column_names):
     for column_name in string_column_names:
         # checking if the string colulmn is string dtype or not
         # if it not the data is invalid
-        if not is_string_dtype(df[column_name].values):
-            return False
+        # we validate only if the column_name is in all_column_names
+        if column_name in all_column_names:
+            if not is_string_dtype(df[column_name].values):
+                return False
 
     # if all the column types are as expected then the data is valid
     return True

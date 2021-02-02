@@ -2,6 +2,7 @@
 data_set_one - all string columns - a, b, c
 data_set_two - one string column - c, two numeric columns - a, b
 data_set_three - all numeric columns - a, b, c
+data_set_four - this does not have a csv extension
 """
 import pandas as pd
 
@@ -23,12 +24,20 @@ def test_data_set_two_true_scenario():
     string_column_names = ["c"]
     assert validate(data_set_two, string_column_names)
 
-def test_data_set_two_false_scenario():
+def test_data_set_two_false_scenario_one():
     string_column_names = ["a"]
     assert not validate(data_set_two, string_column_names)
 
-def test_data_set_three_true_scenario():
+def test_data_set_two_false_scenario_two():
     string_column_names = []
+    assert not validate(data_set_two, string_column_names)
+
+def test_data_set_three_true_scenario_one():
+    string_column_names = []
+    assert validate(data_set_three, string_column_names)
+
+def test_data_set_three_true_scenario_two():
+    string_column_names = ["d"]
     assert validate(data_set_three, string_column_names)
 
 def test_data_set_three_false_scenario():

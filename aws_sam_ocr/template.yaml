@@ -22,6 +22,12 @@ Parameters:
   TempName:
     Type: String
     Default: bar
+  # the column names that must be strings
+  # the format is column names seperated by commas
+  # ex: rid,x_1,is_label
+  StringColumns:
+    Type: String
+    Default: rid,random
 
 Resources:
   DataValidatorAndUploader:
@@ -41,6 +47,8 @@ Resources:
             Ref: ReadPrefix
           writePrefix:
             Ref: WritePrefix
+          stringColumns:
+            Ref: StringColumns
       Policies:
         - Version: '2012-10-17'
           Statement:
@@ -57,6 +65,8 @@ Resources:
               Ref: S3Bucket
             Events:
               - 's3:ObjectCreated:*'
+            # we read the data only from they keys which contain the read_prefix
+            # and has .csv file extension
             Filter:
               S3Key:
                 Rules:

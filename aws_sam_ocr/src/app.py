@@ -18,7 +18,7 @@ s3_client = boto3.client('s3')
 account_name = os.environ.get("accountName")
 read_prefix = os.environ.get("readPrefix")
 write_prefix = os.environ.get("writePrefix")
-string_columns = ["c"]
+string_columns = os.environ.get("stringColumns")
 
 # --------------- Main handler ------------------
 def lambda_handler(event, context):
@@ -31,8 +31,6 @@ def lambda_handler(event, context):
     bucket = event['Records'][0]['s3']['bucket']['name']
     key = urllib.parse.unquote_plus(event['Records'][0]['s3']['object']['key'])
 
-    # we read the data only from they keys which contain the read_prefix
-    # we read only csv data
 
     try:
         obj = s3_client.get_object(Bucket= bucket, Key= key) 
