@@ -38,6 +38,9 @@ Here is a brief overview of what we have generated for you.
 sam local generate-event s3 put --bucket aws-sam-one --key test > event_file.json
 ```
 
+## TODOS
+- Have to streamline integration testins
+
 ## CLI Commands to deploy and test the application
 **WIP**
 
