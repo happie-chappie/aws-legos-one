@@ -16,6 +16,9 @@ Parameters:
   FileExtension:
     Type: String
     Default: .csv
+  BucketName:
+    Type: String
+    Default: sam-test-foo-is-bar
 
 Resources:
   DataValidatorAndUploader:
@@ -42,7 +45,11 @@ Resources:
               Action:
                 - 's3:GetObject'
                 - 's3:PutObject'
-              Resource: 'arn:aws:s3:::*'
+              Resource: !Join
+                - ''
+                - - 'arn:aws:s3:::'
+                  - !Ref BucketName
+                  - /*
       Events:
         BucketEvent1:
           Type: S3
@@ -60,12 +67,12 @@ Resources:
                   - Name: suffix
                     Value:
                       Ref: FileExtension
-#
   
   S3Bucket:
     Type: 'AWS::S3::Bucket'
     Properties:
-      BucketName: sam-test-foo-is-bar
+      BucketName:
+        Ref: BucketName
 
 Outputs:
   BucketName:

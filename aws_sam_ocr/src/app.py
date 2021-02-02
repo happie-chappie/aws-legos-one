@@ -44,6 +44,7 @@ def lambda_handler(event, context):
         logger.info("==================")
         logger.info(is_valid)
 
+        # if valid we write the data back to S3
         if is_valid:
             # writing the data back in write_prefix location using csv buffer
             to_write_key = key.replace(read_prefix, write_prefix)
