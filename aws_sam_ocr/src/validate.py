@@ -21,6 +21,10 @@ def validate(df, string_column_names):
     all_column_names = list(df.columns)
     # subsetting the numeric coluumn names from string column names
     numeric_column_names = list(set(all_column_names) -  set(string_column_names))
+    print(df)
+    print(all_column_names)
+    print(numeric_column_names)
+    print(string_column_names)
 
     # we loop through all the numeric columns
     for column_name in numeric_column_names:

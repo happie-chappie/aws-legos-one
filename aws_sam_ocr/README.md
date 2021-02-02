@@ -1,24 +1,36 @@
-# aws_sam_ocr
-This is an AWS SAM app that uses Rekognition APIs to detect text in S3 Objects and stores labels in DynamoDB.
+# Extraction Core Utils
+	 - This is a set of utils infra that supports extracion core workflows.
+	 - This persently has an AWS SAM app that validates model data for NPI in the client accounts 
+
+## Things to be finalized
+	- To which bucket should sam filed be uploaded ?
+    - 
 
 ## Project structure
 Here is a brief overview of what we have generated for you.
 ```bash
 .
-├── README.md                   <-- This instructions file
-├── src                         <-- Source code for the Lambda function
+├── README.md                   <-- Notes and Playbooks
+├── src                         <-- Source code for the app
 │   ├── __init__.py
-│   └── app.py                  <-- Lambda function code
+│   ├── app.py                  <-- Lambda handler code
+|   └── validate.py             <-- Code for the validator
+├── tests                       <-- Contains testingcode
+│   │── test_validate.py        <-- Unit tests for validator
+│   │── test_event.json         <-- S3 event data for integration testing
+│   └── *.csv                   <-- Sample data for testing
 ├── template.yaml               <-- SAM template
-└── SampleEvent.json            <-- Sample S3 event
+├── deploy                      <-- Deployment shell script
+├── run_unit_tests              <-- Shell script to run unit tests
+└── run_integration_tests       <-- Shell script to run integration tests
 ```
 
 
 ## Requirements
 * AWS CLI
-* [Python 3.6 installed](https://www.python.org/downloads/)
-* [Docker installed](https://www.docker.com/community-edition)
-* [Python Virtual Environment](http://docs.python-guide.org/en/latest/dev/virtualenvs/)
+* Python 3.8
+* Docker
+* pytest package
 
 ## Notes
 ```
@@ -26,35 +38,14 @@ Here is a brief overview of what we have generated for you.
 sam local generate-event s3 put --bucket aws-sam-one --key test > event_file.json
 ```
 
-## CLI Commands to package and deploy your application
-CLI commands to package, deploy and describe outputs defined within the cloudformation stack.
+## CLI Commands to deploy and test the application
+**WIP**
 
-First, we need an `S3 bucket` where we can upload our Lambda functions packaged as ZIP before we deploy anything - If you don't have a S3 bucket to store code artifacts then this is a good time to create one:
-
-```bash
-aws s3 mb s3://BUCKET_NAME
+For deploying
 ```
-
-Next, run the following command to package your Lambda function. The `sam package` command creates a deployment package (ZIP file) containing your code and dependencies, and uploads them to the S3 bucket you specify. 
-
-```bash
-sam package \
-    --template-file template.yaml \
-    --output-template-file packaged.yaml \
-    --s3-bucket REPLACE_THIS_WITH_YOUR_S3_BUCKET_NAME
+./deploy
 ```
-
-The `sam deploy` command will create a Cloudformation Stack and deploy your SAM resources.
-```bash
-sam deploy \
-    --template-file packaged.yaml \
-    --stack-name aws_sam_ocr \
-    --capabilities CAPABILITY_IAM \
-    --parameter-overrides MyParameterSample=MySampleValue
+For running unit tests
 ```
-
-To see the names of the S3 bucket and DynamoDB table created after deployment, you can use the `aws cloudformation describe-stacks` command.
-```bash
-aws cloudformation describe-stacks \
-    --stack-name aws_sam_ocr --query 'Stacks[].Outputs'
+./run_unit_tests
 ```

@@ -19,10 +19,15 @@ account_name = os.environ.get("accountName")
 read_prefix = os.environ.get("readPrefix")
 write_prefix = os.environ.get("writePrefix")
 string_columns = os.environ.get("stringColumns")
+# converting string_columns to a list
+string_columns = string_columns.split(",")
 
 # --------------- Main handler ------------------
 def lambda_handler(event, context):
     '''
+    This function handles the S3 cloudwatch event, checks if there is NPI data
+    in the S3 file uploaded, if there is no NPI data it is written back to the
+    write_prefix
     '''
     # Log the the received event locally.
     logger.info("Received event: " + json.dumps(event, indent=2))
@@ -30,7 +35,6 @@ def lambda_handler(event, context):
     # Get the object from the event.
     bucket = event['Records'][0]['s3']['bucket']['name']
     key = urllib.parse.unquote_plus(event['Records'][0]['s3']['object']['key'])
-
 
     try:
         obj = s3_client.get_object(Bucket= bucket, Key= key) 
