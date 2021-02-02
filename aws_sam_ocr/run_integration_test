@@ -1,3 +1,3 @@
 #!/bin/bash
 
-sam local generate-event s3 put --bucket aws-sam-one --key test > event_file.json
+sam local generate-event s3 put --bucket aws-sam-one --key test > tests/test_event.json
