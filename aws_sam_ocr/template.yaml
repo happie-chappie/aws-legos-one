@@ -6,7 +6,7 @@ Description: SAM app that validates and uploads data back to S3 prefix
 Parameters:
   AccountName:
     Type: String
-    Default: '{{resolve:ssm/account-name:1}}'
+    Default: '{{resolve:ssm/account/name:1}}'
   ReadPrefix:
     Type: String
     Default: model-data
@@ -18,7 +18,7 @@ Parameters:
     Default: .csv
   BucketNamePrefix:
     Type: String
-    Default: sam-test-foo-is
+    Default: experiments
   TempName:
     Type: String
     Default: bar
@@ -56,7 +56,8 @@ Resources:
               Action:
                 - 's3:GetObject'
                 - 's3:PutObject'
-              Resource: !Join ['', ['arn:aws:s3:::', !Ref BucketNamePrefix, !Ref TempName, '/*']]
+              # Resource: !Join ['', ['arn:aws:s3:::', !Ref BucketNamePrefix, '-', !Ref AccountName, '/*']]
+              Resource: !Join ['', ['arn:aws:s3:::', !Ref BucketNamePrefix, '/*']]
       Events:
         BucketEvent1:
           Type: S3
@@ -80,7 +81,8 @@ Resources:
   S3Bucket:
     Type: 'AWS::S3::Bucket'
     Properties:
-      BucketName: !Join ['', [!Ref BucketNamePrefix, !Ref TempName]]
+      # BucketName: !Join ['', [!Ref BucketNamePrefix, '-', !Ref AccountName]]
+      BucketName: !Join ['', [!Ref BucketNamePrefix]]
 
 Outputs:
   BucketName:

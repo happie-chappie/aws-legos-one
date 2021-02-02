@@ -44,6 +44,7 @@ def lambda_handler(event, context):
         is_valid = validate(df, string_columns)
 
         logger.info("==================")
+        logger.info(account_name)
         logger.info(is_valid)
 
         # if valid we write the data back to S3

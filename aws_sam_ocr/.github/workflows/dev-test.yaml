@@ -1,0 +1,32 @@
+# For testing
+---
+
+name: Dev
+on:
+  push:
+  pull_request:
+    branches: [master]
+
+  jobs:
+    test-unit:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Check out
+          uses: actions/checkout@v2
+        - name: Setup python
+          uses: actions/setup-python@v2
+          with:
+            python-version: 3.8
+        - name: Run tests
+          env:
+              AWS_DEFAULT_REGION: us-east-1
+          run: |
+            echo "Installing requirements"
+            pip install boto3
+            cd src
+            pip install -r requirements
+            pip install pytest pytest-cov
+            echo "Installed requirements"
+            echo "Running unit tests"
+            pytest
+            echo "Finished unit tests"
